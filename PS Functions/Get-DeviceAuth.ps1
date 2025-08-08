@@ -14,10 +14,11 @@
 
 function Get-DeviceAuth {
     param (
-        [Parameter(Mandatory=$true)][string]$Scope
+        [Parameter(Mandatory=$true)][string]$Scope,
+        [Parameter(Mandatory=$true)][string]$TenantID
     )    
 
-    $AuthResponse = Invoke-RestMethod -Method POST -Uri "https://login.microsoftonline.com/$EntraTenantID/oauth2/v2.0/devicecode" -Body @{
+    $AuthResponse = Invoke-RestMethod -Method POST -Uri "https://login.microsoftonline.com/$TenantID/oauth2/v2.0/devicecode" -Body @{
         client_id = "d3590ed6-52b3-4102-aeff-aad2292ab01c"
         scope = "$Scope"
     }
@@ -34,7 +35,7 @@ function Get-DeviceAuth {
     # Retrive the token.
     do {
         try {
-            $TokenQuery = Invoke-RestMethod -Method POST -Uri "https://login.microsoftonline.com/$EntraTenantID/oauth2/v2.0/token" -Body @{
+            $TokenQuery = Invoke-RestMethod -Method POST -Uri "https://login.microsoftonline.com/$TenantID/oauth2/v2.0/token" -Body @{
                 client_id = "d3590ed6-52b3-4102-aeff-aad2292ab01c"
                 grant_type = "urn:ietf:params:oauth:grant-type:device_code"
                 device_code = $AuthResponse.device_code
